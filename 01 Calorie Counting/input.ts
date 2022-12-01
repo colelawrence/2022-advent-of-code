@@ -6,7 +6,6 @@ See input.txt
 */
 const encoder = new TextDecoder();
 const input = encoder.decode(await Deno.readFile("./input.txt"));
-console.log(input);
 
 export interface ElfFoodItem {
   index: number;
