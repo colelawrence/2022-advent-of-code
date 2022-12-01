@@ -4,25 +4,31 @@ The Elves take turns writing down the number of Calories contained by the variou
 For example, suppose the Elves finish writing their items' Calories and end up with the following list:
 See input.txt
 */
+const encoder = new TextDecoder();
+const input = encoder.decode(await Deno.readFile("./input.txt"));
+console.log(input);
 
-import { elves, totalCalories } from "./input.ts";
+export interface ElfFoodItem {
+  index: number;
+  calories: number;
+}
 
-const mostCaloriesSorted = elves.sort(
-  (a, b) => totalCalories(b) - totalCalories(a)
-);
+export interface Elf {
+  index: number;
+  foodItems: ElfFoodItem[];
+}
 
-const topThree = mostCaloriesSorted
-  .slice(0, 3)
-  .map((elf) => ({ elf, total: totalCalories(elf) }));
+export function totalCalories(elf: Elf) {
+  return elf.foodItems.reduce((total, next) => total + next.calories, 0);
+}
 
-const totalOfTopThree = topThree.reduce(
-  (totalCalories, nextElf) => totalCalories + nextElf.total,
-  0
-);
-
-console.log({
-  totalOfTopThree,
-  mostCaloriesSorted: topThree,
+export const elves = input.split(/\n\s*\n/g).map((desc, idx): Elf => {
+  return {
+    foodItems: desc
+      .split(/\s+/g)
+      .map(
+        (cals, idx): ElfFoodItem => ({ index: idx, calories: Number(cals) })
+      ),
+    index: idx,
+  };
 });
-
-export const answer = totalOfTopThree;
