@@ -1,8 +1,15 @@
 mod puzzle;
-mod part_1;
-mod part_2;
+mod solutions;
 fn main() {
     println!("{}", puzzle::PROMPT);
-    part_1::part_1();
-    part_2::part_2();
+    highlighted(solutions::part_1);
+    println!("{}", puzzle::PROMPT_2);
+    highlighted(solutions::part_2);
+}
+
+
+fn highlighted<F: Fn()>(f: F) {
+    print!("\x1B[7;95m");
+    f();
+    print!("\x1B[0m");
 }
